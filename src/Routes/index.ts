@@ -1,4 +1,4 @@
-import express, { Router, RequestHandler } from "express";
+/*import express, { Router, RequestHandler } from "express";
 import fs from "fs";
 import { loginCtrl, registerCtrl } from "../controllers/auth.ctrl";
 
@@ -25,3 +25,4 @@ fs.readdirSync(pathRouter).filter((file: string) => {
 });
 router.use('/v2',(req,res)=>{res.send('hola')})
 export default router;
+*/
