@@ -14,44 +14,44 @@ model User {
   id                   Int       @id @default(autoincrement())
   UserName             String
   Email                String    @unique
-  contrasena           String
+  contrasena           String?
   UserRole             String        @unique   @default("NormalProfile")   
-  galleries            Gallery[] 
+  FacebookId String?  @unique
+   googleId String?   @unique
+  ProfilePictureURL      String?
+  ExternalAccessToken    String?
+  galleries            Media[] 
   donations            Donations[] 
   comment              Comments[]
-  facebookProfile FacebookUser?
-  googleProfile   GoogleUser?
-}
-
-model FacebookUser{
-id          Int      @id @default(autoincrement())
-  userId      Int      @unique
-  externalAuthProviderid String
-  ExternalAuthProviderType String
-  ProfilePictureURL      String
-  ExternalAccessToken    String?
- user        User     @relation(fields: [userId], references: [id])
-}
-
-model GoogleUser{
-  id          Int      @id @default(autoincrement())
-  userId      Int      @unique
-  externalAuthProviderid String
-  ExternalAuthProviderType String
-  ProfilePictureURL      String
-  ExternalAccessToken    String?
- user        User     @relation(fields: [userId], references: [id])
+ Publicaciones       Post[]
+ answer Answer[]
 }
 
 
 
 
-model Gallery {
+
+model Post{
+ TypeOf String 
+id Int  @id @default(autoincrement())
+Title String
+Description String
+timestamp    DateTime
+Media Media[]
+User_id     Int
+User        User      @relation(fields: [User_id], references: [id])
+Comments Comments[]
+}
+
+
+
+model Media {
   id          Int       @id @default(autoincrement())
   imgName     String
   ImageUrl    String
   Description String
-  User_role   String
+  Post_id Int
+  Post  Post @relation(fields: [Post_id],references: [id])
   User_id     Int
   User        User      @relation(fields: [User_id], references: [id])
 }
@@ -69,13 +69,27 @@ model Donations {
   User              User      @relation(fields: [User_id], references: [id])
 }
 
+
+
 model Comments {
-  comments_id  Int       @id @default(autoincrement())
+  id  Int       @id @default(autoincrement())
   user         User?     @relation(fields: [user_id], references: [id])
   user_id      Int?
-  content_id   Int
+
   comment      String
   timestamp    DateTime
+  Post_id Int
+  Post  Post @relation(fields: [Post_id],references: [id])
+  Answer Answer[]
+ @@index([user_id], name: "user_id")
+}
 
-  @@index([user_id], name: "user_id")
+model Answer{
+id Int @id @default(autoincrement())
+Answer String
+Comment_id Int
+Comments Comments @relation(fields: [Comment_id], references: [id])
+user         User?     @relation(fields: [user_id], references: [id])
+  user_id      Int?
+
 }
