@@ -1,9 +1,9 @@
 import  CustomError  from "./customError";
 
-export default class DbError extends CustomError {
+export default class ClientError extends CustomError {
   constructor(message: string, statusCode: number) {
     super(message, statusCode);
-    this.name="DbError"
+    this.name="ClientError";
     Error.captureStackTrace(this, this.constructor);
   }
 }

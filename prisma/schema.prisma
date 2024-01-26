@@ -7,89 +7,80 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("DEV_DATABASE_URL")
 }
 
 model User {
-  id                   Int       @id @default(autoincrement())
-  UserName             String
-  Email                String    @unique
-  contrasena           String?
-  UserRole             String        @unique   @default("NormalProfile")   
-  FacebookId String?  @unique
-   googleId String?   @unique
-  ProfilePictureURL      String?
-  ExternalAccessToken    String?
-  galleries            Media[] 
-  donations            Donations[] 
-  comment              Comments[]
- Publicaciones       Post[]
- answer Answer[]
+  id                  Int         @id @default(autoincrement())
+  userName            String
+  email               String      @unique
+  password            String?
+  userRole            String      @unique @default("NormalProfile")
+  facebookId          String?     @unique
+  googleId            String?     @unique
+  profilePictureURL   String?
+  externalAccessToken String?
+  galleries           Media[]
+  donations           Donations[]
+  comment             Comments[]
+  post                Post[]
+  answer              Answer[]
 }
 
-
-
-
-
-model Post{
- TypeOf String 
-id Int  @id @default(autoincrement())
-Title String
-Description String
-timestamp    DateTime
-Media Media[]
-User_id     Int
-User        User      @relation(fields: [User_id], references: [id])
-Comments Comments[]
+model Post {
+  typeOf      String
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String
+  timestamp   DateTime
+  media       Media[]
+  user_id     Int
+  user        User       @relation(fields: [user_id], references: [id])
+  comments    Comments[]
 }
-
-
 
 model Media {
-  id          Int       @id @default(autoincrement())
+  id          Int    @id @default(autoincrement())
   imgName     String
-  ImageUrl    String
+  imageUrl    String
   Description String
-  Post_id Int
-  Post  Post @relation(fields: [Post_id],references: [id])
-  User_id     Int
-  User        User      @relation(fields: [User_id], references: [id])
+  post_id     Int
+  post        Post   @relation(fields: [post_id], references: [id])
+  user_id     Int
+  user        User   @relation(fields: [user_id], references: [id])
 }
 
 model Donations {
-  id                Int       @id @default(autoincrement())
-  amount            Decimal   @db.Decimal(10,2)
-  concurrency       String
-  paypament_status  String
-  paypament_method  String
-  stripe_charge_id  String
-  User_id           Int
-  operationdate     DateTime
-  timeofoperation   DateTime
-  User              User      @relation(fields: [User_id], references: [id])
+  id               Int      @id @default(autoincrement())
+  amount           Decimal  @db.Decimal(10, 2)
+  concurrency      String
+  paypament_status String
+  paypament_method String
+  stripe_charge_id String
+  user_id          Int
+  operationdate    DateTime
+  timeofoperation  DateTime
+  user             User     @relation(fields: [user_id], references: [id])
 }
-
-
 
 model Comments {
-  id  Int       @id @default(autoincrement())
-  user         User?     @relation(fields: [user_id], references: [id])
-  user_id      Int?
+  id        Int      @id @default(autoincrement())
+  user      User?    @relation(fields: [user_id], references: [id])
+  user_id   Int?
+  comment   String
+  timestamp DateTime
+  post_id   Int
+  post      Post     @relation(fields: [post_id], references: [id])
+  answer    Answer[]
 
-  comment      String
-  timestamp    DateTime
-  Post_id Int
-  Post  Post @relation(fields: [Post_id],references: [id])
-  Answer Answer[]
- @@index([user_id], name: "user_id")
+  @@index([user_id], name: "user_id")
 }
 
-model Answer{
-id Int @id @default(autoincrement())
-Answer String
-Comment_id Int
-Comments Comments @relation(fields: [Comment_id], references: [id])
-user         User?     @relation(fields: [user_id], references: [id])
-  user_id      Int?
-
+model Answer {
+  id         Int      @id @default(autoincrement())
+  answer     String
+  comment_id Int
+  comments   Comments @relation(fields: [comment_id], references: [id])
+  user       User?    @relation(fields: [user_id], references: [id])
+  user_id    Int?
 }
