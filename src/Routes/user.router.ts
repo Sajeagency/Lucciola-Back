@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { deleteUserCtrl } from "../Controllers/userCtrl";
+import { deleteUserCtrl, updateUserCtrl } from "../Controllers/userCtrl";
+import { upload } from "../config/multer";
+const router = Router();
 
-const router=Router();
-
-router.delete("/delete/:userId",deleteUserCtrl);
+router.delete("/delete/:userId", deleteUserCtrl);
+router.put("/update/:userId", upload.single('profilePicture'), updateUserCtrl);
 export default router;
