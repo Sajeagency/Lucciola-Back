@@ -8,7 +8,6 @@ const removeExtencion = (fileName: string) => {
 fs.readdirSync(pathRouter).filter((file) => {
   const name = removeExtencion(file);
   if (name !== "index") {
-    console.log(name,file)
     import(`./${file}`).then((module) => {
       router.use(`/${name}`, module.default);
     });
