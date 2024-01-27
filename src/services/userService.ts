@@ -14,12 +14,13 @@ export class userService {
     if (!existingUser) {
       throw new ClientError("User doesn't exist", 404);
     }
-    const user = prisma.user.delete({
+   
+    const user = await prisma.user.delete({
       where: {
         id: UserId,
       },
     });
-
+    
     return { data: user };
   }
 }

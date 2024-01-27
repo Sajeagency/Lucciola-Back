@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 const app = express();
 
-const port = process.env.PORT || 5432;
+const port = process.env.PORT || 3200;
 app.use(express.json());
 app.use(morgan("dev"));
 app.use("/", router);
