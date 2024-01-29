@@ -1,29 +1,31 @@
-import { Request, NextFunction, Response } from "express";
-import { userService } from "../services/userService";
+import { NextFunction, Request, Response } from "express";
 import { HTTP_STATUS } from "../constants/httpStatusCode";
+import { userService } from "../services/userService";
+import { CustomRequest } from "../types/custom.types";
 import handleRegistrationError from "../utils/handleRegistrationError";
 import { sendResponse } from "../utils/sendResponse";
 
 export const updateUserCtrl = async (
-  req: Request,
+  req: CustomRequest,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { userId, name, email, password } = req.body;
-  const pathProfilePicture = req.file && req.file.path
-
-   
+    const { name, email, password } = req.body;
+    const { id } = req.user;
+    const pathProfilePicture = req.file && req.file.path;
+    if(!pathProfilePicture){
+      throw new Error('Profile picture is required')
+    }
     const user = await userService.updateUser(
-      userId,
+      id,
       name,
-      email,
-      password,
+     
       pathProfilePicture
     );
-    return sendResponse(res, HTTP_STATUS.CREATED, user);
+    return sendResponse(res, HTTP_STATUS.OK, user);
   } catch (error: any) {
-    console.log("---->",error)
+    console.log("---->", error);
     handleRegistrationError(error, res, next);
   }
 };

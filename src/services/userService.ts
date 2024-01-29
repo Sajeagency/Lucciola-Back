@@ -1,41 +1,34 @@
 import { PrismaClient } from "@prisma/client";
-import { error } from "console";
 import ClientError from "../errors/clientError";
 import { uploadImg } from "./cloudinary/cloudinaryService";
+import fs from "fs-extra";
 const prisma = new PrismaClient();
 
 export class userService {
-  static async updateUser(
-    UserId: number,
-    name: string,
-    email: string,
-    password: string,
-    pathImage: string | undefined
-  ) {
+  static async updateUser(userId: number, name: string, pathImage: string) {
     let publidIdImgUrl;
     const user = await prisma.user.findUnique({
       where: {
-        id: 3,
+        id: userId,
       },
     });
-    console.log("userservice-->>", user);
+
     if (user?.publicIdImgUrl !== null) {
       publidIdImgUrl = user?.publicIdImgUrl;
     }
-    const result = pathImage && (await uploadImg(pathImage, publidIdImgUrl));
+    const result = await uploadImg(pathImage, publidIdImgUrl);
+    await fs.unlink(pathImage);
     const userUpdate = await prisma.user.update({
       where: {
-        id: 3,
+        id: userId,
       },
       data: {
         userName: name,
-        email: email,
-        password: password,
         publicIdImgUrl: result && result?.public_id,
         profilePictureURL: result && result?.secure_url,
       },
     });
-    console.log("respuesta cloudinary", result);
+
     return { data: userUpdate };
   }
 
