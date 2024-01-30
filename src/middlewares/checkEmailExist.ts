@@ -1,6 +1,6 @@
 import { PrismaClient, Users } from "@prisma/client";
 import { NextFunction, Response } from "express";
-import DbError from "../errors/dbError";
+import DbError from "../errors/clientError";
 import CustomError from "../errors/customError";
 import { CustomRequest } from "../types/custom.types";
 const { users } = new PrismaClient();
