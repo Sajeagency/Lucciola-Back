@@ -15,9 +15,10 @@ model User {
   userName            String
   email               String      @unique
   password            String?
-  userRole            String      @unique @default("NormalProfile")
+  userRole            String      @default("NormalProfile")
   facebookId          String?     @unique
   googleId            String?     @unique
+  publicIdImgUrl      String?
   profilePictureURL   String?
   externalAccessToken String?
   galleries           Media[]
