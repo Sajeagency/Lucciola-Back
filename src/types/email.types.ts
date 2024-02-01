@@ -1,4 +1,4 @@
-export interface emailReset{
+export interface emailToSend{
 to:string;
 subject:string;
 html:string;
