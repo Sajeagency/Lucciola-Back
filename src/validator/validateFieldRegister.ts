@@ -18,4 +18,3 @@ export const validateFieldRegister = [
   (req: Request, res: Response, next: NextFunction) =>
     validateResult(req, res, next),
 ];
-

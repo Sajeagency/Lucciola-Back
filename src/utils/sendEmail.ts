@@ -1,5 +1,5 @@
 import nodemailer, { Transporter } from "nodemailer";
-import {  emailToSend } from "../types/email.types";
+import { emailToSend } from "../types/email.types";
 
 const transporter: Transporter = nodemailer.createTransport({
   service: "yahoo",

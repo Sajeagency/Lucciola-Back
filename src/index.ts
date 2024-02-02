@@ -6,22 +6,16 @@ import { sendErrorResponse } from "./utils/sendErrorResponse";
 
 const prisma = new PrismaClient();
 
-
-
-const prisma = new PrismaClient();
-
-
 const app = express();
 app.use(morgan("dev"));
 app.use(express.json());
 const port = process.env.PORT || 3200;
 
 app.use("/", router);
-app.use("/", router);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   const { statusCode, message } = err;
-  console.log("--->",err)
+  console.log("--->", err);
   sendErrorResponse(res, statusCode, message);
 });
 

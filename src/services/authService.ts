@@ -35,13 +35,13 @@ export class AuthService {
     if (existingUser.password === null) {
       throw new ClientError(
         "password not set for the user",
-        HTTP_STATUS.INTERNAL_SERVER_ERROR
+        HTTP_STATUS.INTERNAL_SERVER_ERROR,
       );
     }
 
     const passwordMatch = await comparePassword(
       password,
-      existingUser.password
+      existingUser.password,
     );
 
     if (!passwordMatch) {

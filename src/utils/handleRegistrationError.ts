@@ -6,7 +6,7 @@ import CustomError from "../errors/customError";
 const handleRegistrationError = (
   error: any,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   if (error instanceof PrismaClientKnownRequestError) {
     console.error("Error conocido de Prisma:", error.message);

@@ -8,7 +8,7 @@ export const uploadImg = async (path: string, publicId: string | undefined) => {
     },
     function (error, result) {
       console.log(result);
-    }
+    },
   );
   return result;
 };

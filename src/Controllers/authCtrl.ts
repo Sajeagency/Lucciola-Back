@@ -8,7 +8,7 @@ import { sendResponse } from "../utils/sendResponse";
 export const registerCtrl = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { name, password, email } = req.body;
@@ -22,7 +22,7 @@ export const registerCtrl = async (
 export const loginCtrl = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { email, password } = req.body;
@@ -36,7 +36,7 @@ export const loginCtrl = async (
 export const googleLoginCtrl = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { token } = req.body;

@@ -35,12 +35,10 @@ export class emailToResetService {
       to: user.email,
       subject: "Recuperacion de Contraseña",
       html: `
-<p>Hola${user.userName}</p>
-<p>Padiste un cambio de contraseña.Hace click abajo para cambiarla</p>
-<a href="${resetLink}"></a>
-<p>Si no hiciste el pedido para cambiar la contraseña , ignora este email</p>
-
-
+     <p>Hola${user.userName}</p>
+      <p>Padiste un cambio de contraseña.Hace click abajo para cambiarla</p>
+      <a href="${resetLink}"></a>
+     <p>Si no hiciste el pedido para cambiar la contraseña , ignora este email</p>
 `,
     });
     return { message: "password reset email enviado " };

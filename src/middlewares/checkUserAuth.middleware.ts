@@ -7,7 +7,7 @@ import { HTTP_STATUS } from "../constants/httpStatusCode";
 const checkUserAuth = (
   req: CustomRequest,
   res: Response,
-  Next: NextFunction
+  Next: NextFunction,
 ) => {
   try {
     const headerAuthorization = req.headers.authorization;

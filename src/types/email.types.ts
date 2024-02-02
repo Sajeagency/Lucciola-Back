@@ -1,5 +1,5 @@
-export interface emailToSend{
-to:string;
-subject:string;
-html:string;
+export interface emailToSend {
+  to: string;
+  subject: string;
+  html: string;
 }

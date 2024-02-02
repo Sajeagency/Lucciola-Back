@@ -5,5 +5,10 @@ import checkUserAuth from "../middlewares/checkUserAuth.middleware";
 const router = Router();
 
 router.delete("/delete/:userId", deleteUserCtrl);
-router.put("/update",checkUserAuth ,upload.single('profilePicture'), updateUserCtrl);
+router.put(
+  "/update",
+  checkUserAuth,
+  upload.single("profilePicture"),
+  updateUserCtrl,
+);
 export default router;

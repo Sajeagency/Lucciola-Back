@@ -8,20 +8,20 @@ import { sendResponse } from "../utils/sendResponse";
 export const updateUserCtrl = async (
   req: CustomRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { name, email, password } = req.body;
     const { id } = req.user;
     const pathProfilePicture = req.file && req.file.path;
-    if(!pathProfilePicture){
-      throw new Error('Profile picture is required')
+    if (!pathProfilePicture) {
+      throw new Error("Profile picture is required");
     }
     const user = await userService.updateUser(
       id,
       name,
-     
-      pathProfilePicture
+
+      pathProfilePicture,
     );
     return sendResponse(res, HTTP_STATUS.OK, user);
   } catch (error: any) {
@@ -32,7 +32,7 @@ export const updateUserCtrl = async (
 export const deleteUserCtrl = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { userId } = req.params;

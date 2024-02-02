@@ -8,11 +8,13 @@ const prisma = new PrismaClient();
 export const checkEmailDuplicate = async (
   req: CustomRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const email = req.body.email;
-    const user: User | null = await prisma.user.findUnique({ where: { email } });
+    const user: User | null = await prisma.user.findUnique({
+      where: { email },
+    });
     if (user) {
       throw new DbError("User already exists", 409);
     }
