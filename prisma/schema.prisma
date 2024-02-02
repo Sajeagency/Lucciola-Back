@@ -21,8 +21,8 @@ model User {
   publicIdImgUrl      String?
   profilePictureURL   String?
   externalAccessToken String?
-  resetToken          String?     
-  resetTokenExpiry    Int? 
+  resetToken          String?
+  resetTokenExpiry    Int?
   galleries           Media[]
   donations           Donations[]
   comment             Comments[]
