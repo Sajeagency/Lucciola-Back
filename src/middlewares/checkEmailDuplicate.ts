@@ -1,9 +1,9 @@
-import { PrismaClient, Users } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import { NextFunction, Response } from "express";
 import CustomError from "../errors/customError";
 import DbError from "../errors/clientError";
 import { CustomRequest } from "../types/custom.types";
-const { users } = new PrismaClient();
+const prisma = new PrismaClient();
 
 export const checkEmailDuplicate = async (
   req: CustomRequest,
@@ -12,7 +12,7 @@ export const checkEmailDuplicate = async (
 ) => {
   try {
     const email = req.body.email;
-    const user: Users | null = await users.findUnique({ where: { email } });
+    const user: User | null = await prisma.user.findUnique({ where: { email } });
     if (user) {
       throw new DbError("User already exists", 409);
     }

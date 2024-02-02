@@ -1,9 +1,9 @@
-import { PrismaClient, Users } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import { NextFunction, Response } from "express";
 import DbError from "../errors/clientError";
 import CustomError from "../errors/customError";
 import { CustomRequest } from "../types/custom.types";
-const { users } = new PrismaClient();
+const prisma = new PrismaClient();
 
 export const checkEmailExist = async (
   req: CustomRequest,
@@ -12,7 +12,7 @@ export const checkEmailExist = async (
 ) => {
   try {
     const email = req.body.email;
-    const user: Users | null = await users.findUnique({ where: { email } });
+    const user: User | null = await prisma.user.findUnique({ where: { email } });
     if (!user) {
       throw new DbError("user does not exist", 404);
     }
