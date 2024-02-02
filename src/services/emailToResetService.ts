@@ -43,6 +43,6 @@ export class emailToResetService {
 
 `,
     });
-    return{message:"password reset email enviado "}
+    return { message: "password reset email enviado " };
   }
 }
