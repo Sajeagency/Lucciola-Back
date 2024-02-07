@@ -22,14 +22,14 @@ export class emailToResetService {
       );
     }
 
-    const resetToken = crypto.randomBytes(20).toString("hex");
-    const resetTokenExpiry = Date.now() + parseInt(passwordExpiry);
-    await prisma.user.update({
+    /* const resetToken = crypto.randomBytes(20).toString("hex");
+    const resetTokenExpiry = Date.now() + parseInt(passwordExpiry); */
+    /* await prisma.user.update({
       where: { id: user.id },
       data: { resetToken, resetTokenExpiry },
-    });
+    }); */
 
-    const resetLink = `http://localhost/reset-password?token=${resetToken}`;
+    const resetLink = `http://localhost/reset-password?token=${"123456"}`;
 
     await sendEmail({
       to: user.email,
