@@ -1,4 +1,6 @@
 import { PrismaClient } from "@prisma/client";
+import { upload } from "../config/multer";
+import { uploadImg } from "./cloudinary/cloudinaryService";
 const prisma = new PrismaClient();
 
 export class postService {
@@ -12,18 +14,41 @@ export class postService {
     userId: number,
     title: string,
     description: string,
-    typeOf: string
+    typeOf: string,
+    image?: string
   ) {
-    const data = await prisma.post.create({
-      data: {
-        user_id: userId,
-        title,
-        description,
-        typeOf,
-        timestamp: new Date(),
-      },
-    });
-    return { data };
+    if (image) {
+      const data = await prisma.post.create({
+        data: {
+          user_id: userId,
+          title,
+          description,
+          typeOf,
+          timestamp: new Date(),
+        },
+      });
+      const imageUpload = await uploadImg(image, undefined);
+      const imgUrl = await prisma.media.create({
+        data: {
+          imageUrl: imageUpload.secure_url,
+          publicId: imageUpload.public_id,
+          post_id: data.id,
+          user_id: userId,
+        },
+      });
+      return { message: "post creado" };
+    } else {
+      const data = await prisma.post.create({
+        data: {
+          user_id: userId,
+          title,
+          description,
+          typeOf,
+          timestamp: new Date(),
+        },
+      });
+      return { data };
+    }
   }
 
   static async deletePost(postId: number) {

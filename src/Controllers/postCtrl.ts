@@ -19,18 +19,16 @@ export const getPostCtrl = async (
 };
 
 export const createPostCtrl = async (
-  req: Request,
+  req: CustomRequest,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { title, userId, description, typeOf } = req.body;
-    const data = await postService.createPost(
-      userId,
-      title,
-      description,
-      typeOf
-    );
+    const { title,description, typeOf } = req.body;
+    const user = req.user
+    const pathImage = req.file && req.file.path;
+    
+    const data = await postService.createPost(user.id,title,description,typeOf,pathImage)
     sendResponse(res, HTTP_STATUS.CREATED, data);
   } catch (error) {
     handleRegistrationError(error, res, next);

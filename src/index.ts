@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
-import router from "./Routes";
+import router from "./routes";
 import { sendErrorResponse } from "./utils/sendErrorResponse";
 
 const prisma = new PrismaClient();
