@@ -15,7 +15,7 @@ export class postService {
     title: string,
     description: string,
     typeOf: string,
-    image?: string
+    image?: string,
   ) {
     if (image) {
       const data = await prisma.post.create({

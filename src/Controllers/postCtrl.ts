@@ -8,7 +8,7 @@ import { HTTP_STATUS } from "../constants/httpStatusCode";
 export const getPostCtrl = async (
   req: CustomRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const data = postService.getPosts();
@@ -21,14 +21,20 @@ export const getPostCtrl = async (
 export const createPostCtrl = async (
   req: CustomRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
-    const { title,description, typeOf } = req.body;
-    const user = req.user
+    const { title, description, typeOf } = req.body;
+    const user = req.user;
     const pathImage = req.file && req.file.path;
-    
-    const data = await postService.createPost(user.id,title,description,typeOf,pathImage)
+
+    const data = await postService.createPost(
+      user.id,
+      title,
+      description,
+      typeOf,
+      pathImage,
+    );
     sendResponse(res, HTTP_STATUS.CREATED, data);
   } catch (error) {
     handleRegistrationError(error, res, next);
@@ -38,7 +44,7 @@ export const createPostCtrl = async (
 export const deletePostCtrl = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { postId } = req.params;
@@ -52,7 +58,7 @@ export const deletePostCtrl = async (
 export const updatePostCtrl = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { postId } = req.params;

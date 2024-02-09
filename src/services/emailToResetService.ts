@@ -18,7 +18,7 @@ export class emailToResetService {
 
     if (passwordExpiry === undefined) {
       throw new Error(
-        "RESET_PASSWORD_EXPIRY is not defined in the environment variables"
+        "RESET_PASSWORD_EXPIRY is not defined in the environment variables",
       );
     }
 

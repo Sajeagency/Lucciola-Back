@@ -17,12 +17,7 @@ export const updateUserCtrl = async (
     if (!pathProfilePicture) {
       throw new Error("Profile picture is required");
     }
-    const user = await userService.updateUser(
-      id,
-      name,
-
-      pathProfilePicture,
-    );
+    const user = await userService.updateUser(id, name, pathProfilePicture);
     return sendResponse(res, HTTP_STATUS.OK, user);
   } catch (error: any) {
     console.log("---->", error);
