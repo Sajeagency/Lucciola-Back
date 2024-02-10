@@ -1,9 +1,10 @@
-import { NextFunction, Response, Request } from "express";
+import { NextFunction, Request, Response } from "express";
+import { HTTP_STATUS } from "../constants/httpStatusCode";
+import { PostService } from "../services/postService";
 import { CustomRequest } from "../types/custom.types";
 import handleRegistrationError from "../utils/handleRegistrationError";
-import { ICreatePost, PostService } from "../services/postService";
 import { sendResponse } from "../utils/sendResponse";
-import { HTTP_STATUS } from "../constants/httpStatusCode";
+import { ICreatePost } from "../types/post.types";
 
 export const getPostCtrl = async (
   req: CustomRequest,
