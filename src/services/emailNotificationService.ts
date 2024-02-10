@@ -3,9 +3,19 @@ import { HTTP_STATUS } from "../constants/httpStatusCode";
 import ClientError from "../errors/clientError";
 import * as crypto from "crypto";
 import { sendEmail } from "../utils/sendEmail";
+import { createTransportNodeMailer } from "../config/nodemailer";
 const prisma = new PrismaClient();
 
-export class emailToResetService {
+export class EmailNotificationService {
+  static async sendEmail(to: string | string[], subject: string, html: string) {
+    const transporter = await createTransportNodeMailer();
+    const info = await transporter.sendMail({
+      to,
+      subject,
+      html,
+    });
+    return info;
+  }
   static async passwordReset(email: string) {
     const user = await prisma.user.findUnique({ where: { email } });
 

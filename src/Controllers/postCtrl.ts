@@ -1,9 +1,10 @@
-import { NextFunction, Response, Request } from "express";
+import { NextFunction, Request, Response } from "express";
+import { HTTP_STATUS } from "../constants/httpStatusCode";
+import { PostService } from "../services/postService";
 import { CustomRequest } from "../types/custom.types";
 import handleRegistrationError from "../utils/handleRegistrationError";
-import { postService } from "../services/postService";
 import { sendResponse } from "../utils/sendResponse";
-import { HTTP_STATUS } from "../constants/httpStatusCode";
+import { ICreatePost } from "../types/post.types";
 
 export const getPostCtrl = async (
   req: CustomRequest,
@@ -11,7 +12,7 @@ export const getPostCtrl = async (
   next: NextFunction,
 ) => {
   try {
-    const data = postService.getPosts();
+    const data = PostService.getPosts();
     sendResponse(res, HTTP_STATUS.OK, data);
   } catch (error) {
     handleRegistrationError(error, res, next);
@@ -24,18 +25,18 @@ export const createPostCtrl = async (
   next: NextFunction,
 ) => {
   try {
-    const { title, description, typeOf } = req.body;
+    const { title, description, typePost } = req.body;
     const user = req.user;
     const pathImage = req.file && req.file.path;
-
-    const data = await postService.createPost(
-      user.id,
+    const postData: ICreatePost = {
+      userId: user.id,
       title,
       description,
-      typeOf,
+      typePost,
       pathImage,
-    );
-    sendResponse(res, HTTP_STATUS.CREATED, data);
+    };
+    const data = await PostService.createPost(postData);
+    sendResponse(res, HTTP_STATUS.CREATED, { data });
   } catch (error) {
     handleRegistrationError(error, res, next);
   }
@@ -48,7 +49,7 @@ export const deletePostCtrl = async (
 ) => {
   try {
     const { postId } = req.params;
-    const deleted_post = await postService.deletePost(+postId);
+    const deleted_post = await PostService.deletePost(+postId);
     return sendResponse(res, HTTP_STATUS.CREATED, deleted_post);
   } catch (error: any) {
     handleRegistrationError(error, res, next);
@@ -62,7 +63,7 @@ export const updatePostCtrl = async (
 ) => {
   try {
     const { postId } = req.params;
-    const updatedPost = await postService.updatePost(+postId);
+    const updatedPost = { data: "hola" }; //await postService.updatePost(+postId);
     sendResponse(res, HTTP_STATUS.OK, updatedPost);
   } catch (error) {
     handleRegistrationError(error, res, next);

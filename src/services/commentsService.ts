@@ -9,10 +9,9 @@ export class CommentsService {
   static async createComment(userId: number, postId: number, comment: string) {
     const data = await prisma.comments.create({
       data: {
-        user_id: userId,
-        post_id: postId,
+        userId,
+        postId,
         comment,
-        timestamp: new Date(),
       },
     });
     return { data };
@@ -33,7 +32,6 @@ export class CommentsService {
       },
       data: {
         comment,
-        timestamp: new Date(),
       },
     });
     return { data };
@@ -41,9 +39,7 @@ export class CommentsService {
 
   static async getCommentsByPostId(postId: number) {
     const data = await prisma.comments.findMany({
-      where: {
-        post_id: postId,
-      },
+      where: { postId },
     });
     return { data };
   }

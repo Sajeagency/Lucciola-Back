@@ -10,14 +10,24 @@ datasource db {
   url      = env("DEV_DATABASE_URL")
 }
 
+enum TypePostEnum {
+  normal
+  evento
+}
+
+enum TypeRoleEnum {
+  admin
+  user
+}
+
 model User {
-  id                  Int         @id @default(autoincrement())
+  id                  Int          @id @default(autoincrement())
   userName            String
-  email               String      @unique
+  email               String       @unique
   password            String?
-  userRole            String      @default("NormalProfile")
-  facebookId          String?     @unique
-  googleId            String?     @unique
+  userRole            TypeRoleEnum @default(user)
+  facebookId          String?      @unique
+  googleId            String?      @unique
   publicIdImgUrl      String?
   profilePictureURL   String?
   externalAccessToken String?
@@ -31,14 +41,14 @@ model User {
 }
 
 model Post {
-  typeOf      String
-  id          Int        @id @default(autoincrement())
+  typePost    TypePostEnum @default(normal)
+  id          Int          @id @default(autoincrement())
   title       String
   description String
-  timestamp   DateTime
+  createAt    DateTime     @default(now())
   media       Media[]
-  user_id     Int
-  user        User       @relation(fields: [user_id], references: [id])
+  userId      Int
+  user        User         @relation(fields: [userId], references: [id])
   comments    Comments[]
 }
 
@@ -48,43 +58,43 @@ model Media {
   imageUrl    String
   Description String?
   publicId    String?
-  post_id     Int
-  post        Post    @relation(fields: [post_id], references: [id])
-  user_id     Int
-  user        User    @relation(fields: [user_id], references: [id])
+  postId      Int
+  post        Post    @relation(fields: [postId], references: [id])
+  userId      Int
+  user        User    @relation(fields: [userId], references: [id])
 }
 
 model Donations {
-  id               Int      @id @default(autoincrement())
-  amount           Decimal  @db.Decimal(10, 2)
-  concurrency      String
-  paypament_status String
-  paypament_method String
-  stripe_charge_id String
-  user_id          Int
-  operationdate    DateTime
-  timeofoperation  DateTime
-  user             User     @relation(fields: [user_id], references: [id])
+  id              Int      @id @default(autoincrement())
+  amount          Decimal  @db.Decimal(10, 2)
+  concurrency     String
+  paypamentStatus String
+  paypamentMethod String
+  stripeChargeId  String
+  userId          Int
+  operationdate   DateTime
+  timeofoperation DateTime
+  user            User     @relation(fields: [userId], references: [id])
 }
 
 model Comments {
-  id        Int      @id @default(autoincrement())
-  user      User?    @relation(fields: [user_id], references: [id])
-  user_id   Int?
-  comment   String
-  timestamp DateTime
-  post_id   Int
-  post      Post     @relation(fields: [post_id], references: [id])
-  answer    Answer[]
+  id       Int      @id @default(autoincrement())
+  user     User?    @relation(fields: [userId], references: [id])
+  userId   Int?
+  comment  String
+  createAt DateTime @default(now())
+  postId   Int
+  post     Post     @relation(fields: [postId], references: [id])
+  answer   Answer[]
 
-  @@index([user_id], name: "user_id")
+  @@index([userId], name: "userId")
 }
 
 model Answer {
-  id         Int      @id @default(autoincrement())
-  answer     String
-  comment_id Int
-  comments   Comments @relation(fields: [comment_id], references: [id])
-  user       User?    @relation(fields: [user_id], references: [id])
-  user_id    Int?
+  id        Int      @id @default(autoincrement())
+  answer    String
+  commentId Int
+  comments  Comments @relation(fields: [commentId], references: [id])
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    Int?
 }
