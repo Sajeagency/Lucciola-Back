@@ -1,9 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import { HTTP_STATUS } from "../constants/httpStatusCode";
 import ClientError from "../errors/clientError";
-import * as crypto from "crypto";
 import { sendEmail } from "../utils/sendEmail";
 import { createTransportNodeMailer } from "../config/nodemailer";
+import jwt from "jsonwebtoken";
 const prisma = new PrismaClient();
 
 export class EmailNotificationService {
@@ -26,17 +26,21 @@ export class EmailNotificationService {
     const passwordExpiry: string | undefined =
       process.env.RESET_PASSWORD_EXPIRY;
 
-    if (passwordExpiry === undefined) {
-      throw new Error(
-        "RESET_PASSWORD_EXPIRY is not defined in the environment variables",
-      );
+    if (!process.env.JWT_SECRET) {
+      throw new Error("JWT_SECRET is not defined in the environment variables");
     }
 
-    const resetToken = crypto.randomBytes(20).toString("hex");
-    const resetTokenExpiry = Date.now() + parseInt(passwordExpiry);
+    const resetToken = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+      expiresIn: passwordExpiry,
+    });
+    const resetTokenExpiry = new Date();
+    resetTokenExpiry.setSeconds(
+      resetTokenExpiry.getSeconds() + parseInt(passwordExpiry || "3600"),
+    );
+
     await prisma.user.update({
       where: { id: user.id },
-      data: { resetToken, resetTokenExpiry },
+      data: { resetToken, resetTokenExpiry: resetTokenExpiry.getTime() },
     });
 
     const resetLink = `http://localhost/reset-password?token=${resetToken}`;

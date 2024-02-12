@@ -6,6 +6,8 @@ const {
   SECRET_GMAIL_NODEMAILER,
   REDIRECT_URI_GMAIL_NODEMAILER,
   REFRESH_TOKEN_GMAIL,
+  MAIL_USER,
+  MAIL_PASSWORD,
 } = process.env;
 
 const client = new OAuth2Client(
