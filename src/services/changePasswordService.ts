@@ -4,7 +4,10 @@ const prisma = new PrismaClient();
 
 export class changePassword {
   static async changePassword(req: Request, res: Response) {
-    const { token, newPassword } = req.body;
+    const {token,newPassword} = req.body;
+    if (!token || !newPassword) {
+      return res.status(400).json({ error: "Token and newPassword are required" });
+    }
     const user = await prisma.user.findFirst({
       where: {
         resetToken: token,
