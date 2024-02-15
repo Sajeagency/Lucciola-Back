@@ -49,14 +49,14 @@ export class EmailNotificationService {
       data: { resetToken, resetTokenExpiry: resetTokenExpiry }, 
     });
 
-    const resetLink = `http://localhost:5432/reset-password?token=${resetToken}`;
+    const resetLink = `http://localhost:5432/passreset/reset/password?token=${user.resetToken}`;
 
     await sendEmail({
       to: user.email,
       subject: "Recuperacion de Contraseña",
       html: `
      <p>Hola ${user.userName}</p>
-      <p>Pediste un cambio de contraseña. Haz click <a href="${resetLink}">aquí</a> para cambiarla</p>
+      <p>Pediste un cambio de contraseña. Haz click ${resetLink} aquí para cambiarla</p>
       <p>Si no hiciste el pedido para cambiar la contraseña, ignora este email</p>
 `,
     });
