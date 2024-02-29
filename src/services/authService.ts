@@ -21,7 +21,7 @@ export class AuthService {
       data: { userName, email, password: hashedPassword },
     });
 
-    const token = generateToken(newUser.id);
+    const token = generateToken(newUser.id, newUser.userRole);
 
     return { data: newUser, token };
   }
@@ -48,7 +48,7 @@ export class AuthService {
       throw new ClientError("incorrect password", HTTP_STATUS.UNAUTHORIZED);
     }
 
-    const token = generateToken(existingUser.id);
+    const token = generateToken(existingUser.id, existingUser.userRole);
 
     return { data: existingUser, token };
   }
@@ -80,12 +80,12 @@ export class AuthService {
         },
       });
 
-      const token = generateToken(newUser.id);
+      const token = generateToken(newUser.id, newUser.userRole);
 
       return { data: newUser, token };
     }
 
-    const token = generateToken(googleUserId);
+    const token = generateToken(existingUser?.id!, existingUser?.userRole!);
 
     return { data: existingUser, token };
   }
