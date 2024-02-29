@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "Media" ALTER COLUMN "imgName" DROP NOT NULL,
-ALTER COLUMN "Description" DROP NOT NULL;
