@@ -24,46 +24,41 @@ export class EmailNotificationService {
     return info;
   }
 
-  static async passwordReset(email: string):Promise<PasswordResetResult> {
+  static async passwordReset(email: string): Promise<PasswordResetResult> {
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
-      throw new ClientError("User not found", HTTP_STATUS.NOT_FOUND);
+        throw new ClientError("User not found", HTTP_STATUS.NOT_FOUND);
     }
 
     const passwordExpirySeconds: number = parseInt(process.env.RESET_PASSWORD_EXPIRY || "3600");
 
     if (!process.env.JWT_SECRET) {
-      throw new Error("JWT_SECRET is not defined in the environment variables");
+        throw new Error("JWT_SECRET is not defined in the environment variables");
     }
 
-   const resetToken = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-      expiresIn: passwordExpirySeconds, 
+    const resetToken = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+        expiresIn: passwordExpirySeconds,
     });
-
-   
-    const resetTokenExpiry = Math.floor(Date.now() / 1000) + passwordExpirySeconds;
-
+    const resetTokenExpiry = new Date();
+    resetTokenExpiry.setSeconds(resetTokenExpiry.getSeconds() + passwordExpirySeconds);
     await prisma.user.update({
-      where: { id: user.id },
-      data: { resetToken, resetTokenExpiry: resetTokenExpiry }, 
+        where: { id: user.id },
+        data: { resetToken, resetTokenExpiry },
     });
 
-    const resetLink = `http://localhost:5432/passreset/reset/password?token=${user.resetToken}`;
+    const resetLink = `http://localhost:5433/passreset/reset/password?token=${resetToken}`;
 
     await sendEmail({
-      to: user.email,
-      subject: "Recuperacion de Contraseña",
-      html: `
-     <p>Hola ${user.userName}</p>
-      <p>Pediste un cambio de contraseña. Haz click ${resetLink} aquí para cambiarla</p>
-      <p>Si no hiciste el pedido para cambiar la contraseña, ignora este email</p>
-`,
+        to: user.email,
+        subject: "Recuperacion de Contraseña",
+        html: `
+            <p>Hola ${user.userName}</p>
+            <p>Pediste un cambio de contraseña. Haz click <a href="${resetLink}">aquí</a> para cambiarla</p>
+            <p>Si no hiciste el pedido para cambiar la contraseña, ignora este email</p>
+        `,
     });
 
-    return { message: "password reset email enviado ",resetToken
- 
-  };
-
-  }
+    return { message: "password reset email enviado ", resetToken };
+}
 }

@@ -31,11 +31,13 @@ export class PostService {
     }
 
     if (typePost === "evento") {
+      const postURL = `https://localhost:5433/posts/${postId}`;
       const emails = await getEmailUsers();
+      const emailContent = `<strong>${title}</strong><br><a href="${postURL}">View Post</a>`;
       const notificationSend = await EmailNotificationService.sendEmail(
         emails,
         "new post",
-        `<strong>${title}</strong>`,
+        emailContent,
       );
 
       return {
@@ -56,7 +58,7 @@ export class PostService {
     return { data };
   }
 
-  /* static async updatePost(postId: number) {
+ static async updatePost(postId: number) {
     const data = await prisma.post.update({
       where: {
         id: postId,
@@ -66,5 +68,4 @@ export class PostService {
       },
     });
     return { data };
-  } */
-}
+  } };

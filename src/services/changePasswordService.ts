@@ -2,9 +2,8 @@ import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 const prisma = new PrismaClient();
 
-export class changePassword {
-  static async changePassword(req: Request, res: Response) {
-    const token=req.query
+export async function  changePassword(req: Request, res: Response) {
+    const token=req.query.token as string;
     console.log(req.query);
     const {newPassword} = req.body;
     if (!token || !newPassword) {
@@ -17,7 +16,7 @@ export class changePassword {
 
         resetToken: String(token),
         resetTokenExpiry: {
-          gte: new Date().getTime(),
+          gte: new Date(),
         },
       },
     });
@@ -35,5 +34,5 @@ export class changePassword {
 
     res.json({ message: "Password reset successful" });
     }
-  }
+  
 

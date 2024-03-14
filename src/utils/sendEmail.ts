@@ -7,9 +7,11 @@ const {
   SECRET_GMAIL_NODEMAILER,
   REDIRECT_URI_GMAIL_NODEMAILER,
   REFRESH_TOKEN_GMAIL,
+  MAIL_USER,
+  MAIL_PASSWORD
 } = process.env;
 
-const oAuth2Client = new OAuth2Client(
+/*const oAuth2Client = new OAuth2Client(
   ID_CLIENT_GMAIL_NODEMAILER,
   SECRET_GMAIL_NODEMAILER,
   REDIRECT_URI_GMAIL_NODEMAILER
@@ -17,12 +19,12 @@ const oAuth2Client = new OAuth2Client(
 oAuth2Client.setCredentials({
   refresh_token: REFRESH_TOKEN_GMAIL,
 });
+*/
 
-export const sendEmail = async ({ to, subject, html }: emailToSend) => {
-  const { token } = await oAuth2Client.getAccessToken();
+ // const { token } = await oAuth2Client.getAccessToken();
 
   const transporter: Transporter = nodemailer.createTransport({
-    service: "gmail",
+  /*  service: "gmail",
     auth: {
       type: "OAuth2",
       user: "santiagousca716@gmail.com",
@@ -32,9 +34,18 @@ export const sendEmail = async ({ to, subject, html }: emailToSend) => {
       accessToken: token as string, 
     },
   });
+*/
+service: "yahoo",
 
+auth: {
+  user: process.env.MAIL_USER,
+  pass: process.env.MAIL_PASSWORD,
+},
+
+  });
+  export const sendEmail = async ({ to, subject, html }: emailToSend) => {
   const emailReset = {
-    from: "santiagousca716@gmail.com",
+    from: "mad_civ@yahoo.com",
     to,
     subject,
     html,
@@ -42,4 +53,4 @@ export const sendEmail = async ({ to, subject, html }: emailToSend) => {
 
   const result = await transporter.sendMail(emailReset);
   return result;
-};
+  };

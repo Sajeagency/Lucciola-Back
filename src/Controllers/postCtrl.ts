@@ -63,7 +63,9 @@ export const updatePostCtrl = async (
 ) => {
   try {
     const { postId } = req.params;
-    const updatedPost = { data: "hola" }; //await postService.updatePost(+postId);
+    const updatedPost = await PostService.updatePost(+postId); 
+    sendResponse(res, HTTP_STATUS.OK, updatedPost);
+
     sendResponse(res, HTTP_STATUS.OK, updatedPost);
   } catch (error) {
     handleRegistrationError(error, res, next);

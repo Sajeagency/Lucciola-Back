@@ -50,6 +50,7 @@ model Post {
   userId      Int
   user        User         @relation(fields: [userId], references: [id])
   comments    Comments[]
+    timestamp   DateTime @default(now())
 }
 
 model Media {
