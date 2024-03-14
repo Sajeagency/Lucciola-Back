@@ -13,7 +13,10 @@ export class PostService {
     return { data };
   }
 
-  static async createPost(postdata: ICreatePost) {
+  static async createPost(postdata: ICreatePost, userRole: string) {
+    if (userRole !== "admin") {
+      throw new Error("Only admin users can create posts");
+    }
     const { description, pathImage, title, typePost, userId } = postdata;
 
     const postData = { title, description, typePost, userId };
@@ -35,7 +38,7 @@ export class PostService {
       const notificationSend = await EmailNotificationService.sendEmail(
         emails,
         "new post",
-        `<strong>${title}</strong>`,
+        `<strong>${title}</strong>`
       );
 
       return {
@@ -47,7 +50,11 @@ export class PostService {
     return { message: "publication created" };
   }
 
-  static async deletePost(postId: number) {
+  static async deletePost(postId: number, userRole: string) {
+    if (userRole !== "admin") {
+      throw new Error("Only admin users can delete posts");
+    }
+
     const data = await prisma.post.delete({
       where: {
         id: postId,
@@ -56,15 +63,35 @@ export class PostService {
     return { data };
   }
 
-  /* static async updatePost(postId: number) {
-    const data = await prisma.post.update({
+  static async updatePost(
+    postId: number,
+    updatedPostData: Partial<ICreatePost>,
+    userRole: string
+  ) {
+    if (userRole !== "admin") {
+      throw new Error("Only admin users can update posts");
+    }
+    const existingPost = await prisma.post.findUnique({
       where: {
         id: postId,
       },
-      data: {
-        timestamp: new Date(),
-      },
     });
-    return { data };
-  } */
+
+    if (!existingPost) {
+      throw new Error("Post not found");
+    }
+
+    const { description, pathImage, title, typePost, userId } = updatedPostData;
+
+    const postData = { title, description, typePost, userId };
+
+    const updatedPost = await prisma.post.update({
+      where: {
+        id: postId,
+      },
+      data: { ...postData },
+    });
+
+    return { message: "Post updated successfully", data: updatedPost };
+  }
 }
