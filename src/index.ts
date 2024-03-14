@@ -1,13 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
-import router from "./routes";
-import passport from 'passport';
+import router from "./Routes";
+import passport from "passport";
 import { configurePassport } from "./services/passportService";
 import { sendErrorResponse } from "./utils/sendErrorResponse";
 import { Session } from "express-session";
 
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 const prisma = new PrismaClient();
 import bodyParser from "body-parser";

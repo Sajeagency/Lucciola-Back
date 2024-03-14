@@ -9,7 +9,7 @@ import { ICreatePost } from "../types/post.types";
 export const getPostCtrl = async (
   req: CustomRequest,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const data = PostService.getPosts();
@@ -22,7 +22,7 @@ export const getPostCtrl = async (
 export const createPostCtrl = async (
   req: CustomRequest,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const { title, description, typePost } = req.body;
@@ -35,7 +35,7 @@ export const createPostCtrl = async (
       typePost,
       pathImage,
     };
-    const data = await PostService.createPost(postData);
+    const data = await PostService.createPost(postData, user.role);
     sendResponse(res, HTTP_STATUS.CREATED, { data });
   } catch (error) {
     handleRegistrationError(error, res, next);
@@ -45,11 +45,11 @@ export const createPostCtrl = async (
 export const deletePostCtrl = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const { postId } = req.params;
-    const deleted_post = await PostService.deletePost(+postId);
+    const deleted_post = await PostService.deletePost(+postId, req.user.role);
     return sendResponse(res, HTTP_STATUS.CREATED, deleted_post);
   } catch (error: any) {
     handleRegistrationError(error, res, next);
@@ -59,11 +59,11 @@ export const deletePostCtrl = async (
 export const updatePostCtrl = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const { postId } = req.params;
-    const updatedPost = await PostService.updatePost(+postId); 
+    const updatedPost = await PostService.updatePost(+postId);
     sendResponse(res, HTTP_STATUS.OK, updatedPost);
 
     sendResponse(res, HTTP_STATUS.OK, updatedPost);
