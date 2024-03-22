@@ -83,7 +83,7 @@ export class PostService {
 
     const { description, pathImage, title, typePost, userId } = updatedPostData;
 
-    const postData = { title, description, typePost, userId };
+    const postData = { title, description, pathImage,typePost, userId };
 
     const updatedPost = await prisma.post.update({
       where: {
