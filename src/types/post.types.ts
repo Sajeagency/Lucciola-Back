@@ -5,3 +5,10 @@ export interface ICreatePost {
   typePost: "normal" | "evento";
   pathImage?: string;
 }
+
+export interface IUpdatePost {
+  title: string;
+  description: string;
+  typePost: "normal" | "evento";
+  pathImage?: string;
+}

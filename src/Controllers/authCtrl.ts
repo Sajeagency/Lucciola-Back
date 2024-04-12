@@ -11,8 +11,8 @@ export const registerCtrl = async (
   next: NextFunction,
 ) => {
   try {
-    const { name, password, email } = req.body;
-    const newUser = await AuthService.register(name, email, password);
+    const { name, password, email, userRole } = req.body;
+    const newUser = await AuthService.register(name, email, password, userRole);
     return sendResponse(res, HTTP_STATUS.CREATED, newUser);
   } catch (error: any) {
     handleRegistrationError(error, res, next);

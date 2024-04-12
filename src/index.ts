@@ -3,7 +3,7 @@ import session from 'express-session';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import { PrismaClient } from '@prisma/client';
-import router from './routes';
+import router from './Routes';
 import { configurePassport } from './services/passportService';
 
 

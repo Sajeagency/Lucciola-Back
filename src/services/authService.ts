@@ -2,13 +2,13 @@ import { HTTP_STATUS } from "../constants/httpStatusCode";
 import ClientError from "../errors/clientError";
 import { comparePassword, hashPassword } from "../utils/bcryp";
 import { generateToken } from "../utils/authToken";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, TypeRoleEnum } from "@prisma/client";
 import { OAuth2Client } from "google-auth-library";
 const prisma = new PrismaClient();
 const client = new OAuth2Client();
 const { ID_CLIENT_GOOGLE } = process.env;
 export class AuthService {
-  static async register(userName: string, email: string, password: string) {
+  static async register(userName: string, email: string, password: string, userRole: TypeRoleEnum) {
     const existingUser = await prisma.user.findUnique({ where: { email } });
 
     if (existingUser) {
@@ -18,7 +18,7 @@ export class AuthService {
     const hashedPassword = await hashPassword(password);
 
     const newUser = await prisma.user.create({
-      data: { userName, email, password: hashedPassword },
+      data: { userName, email, password: hashedPassword, userRole},
     });
 
     const token = generateToken(newUser.id, newUser.userRole);

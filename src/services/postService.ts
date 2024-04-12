@@ -1,5 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, TypeRoleEnum } from "@prisma/client";
 import { ICreatePost } from "../types/post.types";
+import { IUpdatePost } from "../types/post.types";
 import { getEmailUsers } from "../utils/getEmailUsers.utils";
 import { uploadImg } from "./cloudinary/cloudinaryService";
 import { EmailNotificationService } from "./emailNotificationService";
@@ -13,10 +14,8 @@ export class PostService {
     return { data };
   }
 
-  static async createPost(postdata: ICreatePost, userRole: string) {
-    if (userRole !== "admin") {
-      throw new Error("Only admin users can create posts");
-    }
+  static async createPost(postdata: ICreatePost) {
+
     const { description, pathImage, title, typePost, userId } = postdata;
 
     const postData = { title, description, typePost, userId };
@@ -47,12 +46,15 @@ export class PostService {
       };
     }
 
-    return { message: "publication created" };
+    return { postData };
   }
 
-  static async deletePost(postId: number, userRole: string) {
-    if (userRole !== "admin") {
-      throw new Error("Only admin users can delete posts");
+  static async deletePost(postId: number) {
+
+    const post = await prisma.post.findUnique({ where: { id: postId } });
+
+    if (!post) {
+        throw new Error('Post not found');
     }
 
     const data = await prisma.post.delete({
@@ -65,12 +67,8 @@ export class PostService {
 
   static async updatePost(
     postId: number,
-    updatedPostData: Partial<ICreatePost>,
-    userRole: string
+    updatedPostData: IUpdatePost,
   ) {
-    if (userRole !== "admin") {
-      throw new Error("Only admin users can update posts");
-    }
     const existingPost = await prisma.post.findUnique({
       where: {
         id: postId,
@@ -81,9 +79,9 @@ export class PostService {
       throw new Error("Post not found");
     }
 
-    const { description, pathImage, title, typePost, userId } = updatedPostData;
+    const { description, pathImage, title, typePost } = updatedPostData;
 
-    const postData = { title, description, pathImage,typePost, userId };
+    const postData = { title, description, pathImage,typePost };
 
     const updatedPost = await prisma.post.update({
       where: {

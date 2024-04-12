@@ -4,7 +4,7 @@ import { PostService } from "../services/postService";
 import { CustomRequest } from "../types/custom.types";
 import handleRegistrationError from "../utils/handleRegistrationError";
 import { sendResponse } from "../utils/sendResponse";
-import { ICreatePost } from "../types/post.types";
+import { ICreatePost, IUpdatePost } from "../types/post.types";
 
 export const getPostCtrl = async (
   req: CustomRequest,
@@ -35,7 +35,7 @@ export const createPostCtrl = async (
       typePost,
       pathImage,
     };
-    const data = await PostService.createPost(postData, user.userRole);
+    const data = await PostService.createPost(postData);
     sendResponse(res, HTTP_STATUS.CREATED, { data });
   } catch (error) {
     handleRegistrationError(error, res, next);
@@ -48,14 +48,9 @@ export const deletePostCtrl = async (
   next: NextFunction,
 ) => {
   try {
-    const { postId } = req.params;
-    const userRole = req.user?.userRole;
+    const  postId  = req.params.postId;
 
-    if (userRole !== "admin") {
-      throw new Error("Only admin users can delete posts");
-    }
-
-    const deletedPost = await PostService.deletePost(+postId, userRole);
+    const deletedPost = await PostService.deletePost(+postId);
     return sendResponse(res, HTTP_STATUS.OK, deletedPost);
   } catch (error) {
     handleRegistrationError(error, res, next);
@@ -68,16 +63,16 @@ export const updatePostCtrl = async (
   next: NextFunction,
 ) => {
   try {
-    const { postId } = req.params;
+    const  postId  = req.params.postId;
     const { title, description, typePost } = req.body;
 
-    const updatedPostData: Partial<ICreatePost> = {
+    const updatedPostData: IUpdatePost = {
       title,
       description,
-      typePost
+      typePost,
     };
 
-    const updatedPost = await PostService.updatePost(+postId, updatedPostData, req.user?.userRole);
+    const updatedPost = await PostService.updatePost(+postId, updatedPostData);
     sendResponse(res, HTTP_STATUS.OK, updatedPost);
   } catch (error) {
     handleRegistrationError(error, res, next);
