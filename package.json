@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A simple Node.js Express app for getting started on FL0",
   "scripts": {
+    "studio": "npx prisma studio",
     "migrate": "npx prisma migrate dev",
     "reset": "npx prisma migrate reset",
     "test": "echo \"Error: no test specified\" && exit 1",
