@@ -20,10 +20,10 @@ export class PostService {
 
     const postData = { title, description, typePost, userId };
 
-    const { id: postId } = await prisma.post.create({
+    const newPost = await prisma.post.create({
       data: { ...postData },
     });
-
+    const {id:postId}=newPost
     if (pathImage) {
       const { secure_url: imageUrl, public_id: publicId } =
         await uploadImg(pathImage);
@@ -46,7 +46,7 @@ export class PostService {
       };
     }
 
-    return { postData };
+    return { newPost };
   }
 
   static async deletePost(postId: number) {
