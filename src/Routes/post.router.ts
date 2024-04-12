@@ -12,13 +12,13 @@ import { checkRoleAuth } from "../middlewares/checkRoleAuth.middleware";
 const router = Router();
 router.get("/", getPostCtrl);
 router.delete(
-  "delete-post/:postId",
+  "/delete-post/:postId",
   checkUserAuth,
   checkRoleAuth(["admin"]),
   deletePostCtrl
 );
 router.put(
-  "update-post/:postId",
+  "/update-post/:postId",
   checkUserAuth,
   checkRoleAuth(["admin"]),
   upload.single("image"),
